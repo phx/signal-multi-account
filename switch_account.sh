@@ -10,8 +10,13 @@ fi
 
 if [ $MAC -eq 1 ]; then
   SIGNAL_DIR="${HOME}/Library/Application Support/Signal"
-else
+elif [ -d "${HOME}/.config/Signal" ]; then
+  SIGNAL_DIR="${HOME}/config/Signal"
+elif [ -d "/opt/Signal" ]; then
   SIGNAL_DIR="/opt/Signal"
+else
+  echo "No Signal Desktop installation was found"
+  exit 1
 fi
 
 SECONDARY="${SIGNAL_DIR}.secondary"
@@ -37,11 +42,6 @@ start_signal() {
     (signal-desktop &) >/dev/null 2>&1
   fi
 }
-
-if [ ! -d "$SIGNAL_DIR" ]; then
-  echo "No Signal Desktop installation was found"
-  exit 1
-fi
 
 # if first time starting:
 if [ ! -d "$SECONDARY" ]; then
